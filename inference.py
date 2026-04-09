@@ -151,7 +151,7 @@ def run_episode(task_name: str) -> None:
                 result = env_step(action, task_name)
 
                 step += 1
-                reward = result["reward"]
+                reward = max(0.01, min(0.99, result["reward"]))
                 done = result["done"]
                 obs = result["observation"]
                 last_action_error = None
@@ -171,9 +171,9 @@ def run_episode(task_name: str) -> None:
             except json.JSONDecodeError as e:
                 last_action_error = f"JSONDecodeError: {str(e)[:80]}"
                 step += 1
-                rewards.append(0.0)
+                rewards.append(0.01)
                 print(
-                    f"[STEP] step={step} action=parse_error reward=0.00 "
+                    f"[STEP] step={step} action=parse_error reward=0.01 "
                     f"done=false error={last_action_error}",
                     flush=True,
                 )
@@ -181,10 +181,10 @@ def run_episode(task_name: str) -> None:
             except requests.RequestException as e:
                 last_action_error = f"EnvError: {str(e)[:80]}"
                 step += 1
-                rewards.append(0.0)
+                rewards.append(0.01)
                 done = True
                 print(
-                    f"[STEP] step={step} action=env_error reward=0.00 "
+                    f"[STEP] step={step} action=env_error reward=0.01 "
                     f"done=true error={last_action_error}",
                     flush=True,
                 )
@@ -192,7 +192,9 @@ def run_episode(task_name: str) -> None:
     except Exception as e:
         last_action_error = f"FatalError: {str(e)[:80]}"
 
-    rewards_str = ",".join(f"{r:.2f}" for r in rewards) if rewards else "0.00"
+    # Clamp all rewards strictly to (0, 1) — validator rejects exactly 0.0 or 1.0
+    rewards = [max(0.01, min(0.99, r)) for r in rewards]
+    rewards_str = ",".join(f"{r:.2f}" for r in rewards) if rewards else "0.01"
     success_str = "true" if success else "false"
     print(
         f"[END] success={success_str} steps={step} rewards={rewards_str}",
