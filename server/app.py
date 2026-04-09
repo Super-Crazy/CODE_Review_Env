@@ -165,6 +165,23 @@ async def websocket_endpoint(websocket: WebSocket, task_name: str):
         pass
 
 
+# ── Entry Point ────────────────────────────────────────────────────────────────
+
+def main():
+    """Start the Code Review OpenEnv server using uvicorn."""
+    import uvicorn
+    uvicorn.run(
+        "server.app:app",
+        host="0.0.0.0",
+        port=int(os.environ.get("PORT", 8000)),
+        reload=False,
+    )
+
+
+if __name__ == "__main__":
+    main()
+
+
 # ── Optional Web Interface ─────────────────────────────────────────────────────
 
 @app.get("/web", response_class=HTMLResponse)
