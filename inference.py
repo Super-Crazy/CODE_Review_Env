@@ -207,7 +207,7 @@ def run_all_tasks() -> None:
 
 
 if __name__ == "__main__":
-    task = sys.argv[1] if len(sys.argv) > 1 else TASK_NAME
+    task = sys.argv[1] if len(sys.argv) > 1 else "all"
     if task == "all":
         run_all_tasks()
     else:

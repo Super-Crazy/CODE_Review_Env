@@ -85,8 +85,9 @@ class CodeReviewEnvironment:
         self._step_count += 1
         reward, feedback = grade_action(action, self._task)
 
-        # Accumulate reward (cap at 1.0)
-        self._cumulative_reward = min(1.0, self._cumulative_reward + reward * (1.0 / self._task.max_steps))
+        # Accumulate reward (strictly between 0 and 1)
+        self._cumulative_reward = min(0.99, self._cumulative_reward + reward * (1.0 / self._task.max_steps))
+        self._cumulative_reward = max(0.01, self._cumulative_reward)
 
         self._attempts.append({
             "step": self._step_count,

@@ -70,6 +70,8 @@ def grade_action(action: CodeReviewAction, task: Task) -> Tuple[float, str]:
 
     raw_score = (earned_points / total_points) if total_points > 0 else 0.0
     reward = max(0.0, min(1.0, raw_score - fp_penalty + approval_bonus))
+    # Scores must be strictly between 0 and 1 (not 0.0, not 1.0)
+    reward = max(0.01, min(0.99, reward))
 
     # Build feedback message
     found_count = len(matched_gts)
