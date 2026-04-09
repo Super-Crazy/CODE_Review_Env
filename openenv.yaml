@@ -1,0 +1,35 @@
+name: code-review-env
+version: "1.0.0"
+description: >
+  An AI-powered code review environment where agents learn to identify bugs,
+  security vulnerabilities, style issues, and performance problems in real
+  Python code snippets. Tasks span easy → medium → hard with deterministic
+  graders and incremental reward shaping.
+author: OpenEnv Hackathon Submission
+tags:
+  - openenv
+  - code-review
+  - software-engineering
+  - real-world
+  - python
+environment:
+  action_space: CodeReviewAction
+  observation_space: CodeReviewObservation
+  tasks:
+    - name: find_bug
+      difficulty: easy
+      description: Identify a simple logical or runtime bug in a short function.
+    - name: security_audit
+      difficulty: medium
+      description: Detect security vulnerabilities (injection, unsafe eval, hardcoded secrets, etc.)
+    - name: full_review
+      difficulty: hard
+      description: Perform a comprehensive code review covering bugs, security, style, and performance.
+  reward:
+    type: incremental
+    range: [0.0, 1.0]
+    description: Rewards correctness, completeness, and precision of findings.
+deployment:
+  platform: huggingface-spaces
+  hardware: cpu-basic
+  port: 8000

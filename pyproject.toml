@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "code-review-env"
+version = "1.0.0"
+description = "An OpenEnv RL environment for AI-powered code review"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "BSD-3-Clause" }
+keywords = ["openenv", "reinforcement-learning", "code-review", "llm", "ai-agents"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: BSD Software License",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "fastapi>=0.104.0",
+    "uvicorn>=0.24.0",
+    "pydantic>=2.0.0",
+    "websockets>=12.0",
+    "requests>=2.31.0",
+    "openai>=1.30.0",
+    "python-multipart>=0.0.6",
+    "httpx>=0.25.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0", "httpx>=0.25.0", "pytest-asyncio"]
+
+[project.scripts]
+code-review-server = "server.app:app"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["code_review_env*", "server*"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
